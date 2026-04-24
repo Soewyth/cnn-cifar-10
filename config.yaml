@@ -1,0 +1,21 @@
+data:
+  dataset: CIFAR10
+  data_dir: ./data
+  image_size: 32
+  channels: 3
+  num_classes: 10
+
+training:
+  batch_size: 128
+  num_epochs: 15
+  learning_rate: 0.001
+  random_seed: 42
+  optimizer: Adam
+
+model:
+  architecture: ResNet18
+  pretrained: True
+
+paths:
+  models_dir: ./outputs/models
+  figures_dir: ./outputs/figures
