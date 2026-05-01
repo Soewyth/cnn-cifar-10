@@ -18,5 +18,5 @@ def get_resnet18():
     # Unfreeze the last fc layer (already unfrozen by default, but its explicitly set)
     for param in model.fc.parameters():
         param.requires_grad = True
-        
+
     return model
