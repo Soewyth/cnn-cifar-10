@@ -10,11 +10,13 @@ training:
   num_epochs: 15
   learning_rate: 0.001
   random_seed: 42
-  optimizer: Adam
+  optimizer: adam
 
 model:
   architecture: ResNet18
-  pretrained: True
+  pretrained: true
+  freeze_backbone: false
+  input_size: 224
 
 paths:
   models_dir: ./outputs/models
