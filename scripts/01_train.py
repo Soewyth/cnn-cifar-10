@@ -29,8 +29,13 @@ def main():
     path_figure = paths["figures"]
     path_model = paths["models"]
 
+    # config to compare models with different hyperparameters
+    image_size = config["model"]["input_size"]
+    pretrained = config["model"]["pretrained"]
+    freeze_backbone = config["model"]["freeze_backbone"]
+
     # Get run ID
-    run_id = get_run_id()
+    run_id = get_run_id(tag="run2_finetune_inputsize_32_freezetrue_512features")
 
     # Get same seed
     seed = config["training"]["random_seed"]
@@ -39,7 +44,7 @@ def main():
     random.seed(seed)  # for random
 
     # Get Transforms
-    preprocessing = get_preprocessing_transforms()
+    preprocessing = get_preprocessing_transforms(image_size=image_size)
     augmentation = get_augmentation_transforms()
     combined = transforms.Compose([*augmentation.transforms, *preprocessing.transforms])
 
@@ -59,7 +64,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Get model
-    model = get_resnet18()
+    model = get_resnet18(pretrained=pretrained, freeze_backbone=freeze_backbone)
     model.to(device)
 
     optimizer_name = config["training"]["optimizer"]
@@ -129,6 +134,7 @@ def main():
             "config_path": str(root_dir / "config.yaml"),
             "training": config["training"],
             "paths": config["paths"],
+            "model": config["model"],
         },
         "results": {
             "average_train_loss": average_train_loss,

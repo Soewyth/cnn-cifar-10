@@ -15,8 +15,8 @@ training:
 model:
   architecture: ResNet18
   pretrained: true
-  freeze_backbone: false
-  input_size: 224
+  freeze_backbone: true
+  input_size: 32
 
 paths:
   models_dir: ./outputs/models
