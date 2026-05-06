@@ -35,7 +35,7 @@ def main():
     freeze_backbone = config["model"]["freeze_backbone"]
 
     # Get run ID
-    run_id = get_run_id(tag="run2_finetune_inputsize_32_freezetrue_512features")
+    run_id = get_run_id(tag="run3_finetune_inputsize_224_freezefalse_512features")
 
     # Get same seed
     seed = config["training"]["random_seed"]
@@ -54,10 +54,16 @@ def main():
 
     # DataLoaders
     train_dataloader = DataLoader(
-        train_data, batch_size=config["training"]["batch_size"], shuffle=True
+        train_data,
+        batch_size=config["training"]["batch_size"],
+        shuffle=True,
+        num_workers=4,
     )
     test_dataloader = DataLoader(
-        test_data, batch_size=config["training"]["batch_size"], shuffle=False
+        test_data,
+        batch_size=config["training"]["batch_size"],
+        shuffle=False,
+        num_workers=4,
     )
 
     # Get device
@@ -83,9 +89,15 @@ def main():
     average_test_loss = 0.0
     average_test_accuracies = 0.0
 
+    # Lists to store train losses and test accuracies for each epoch
     train_losses = []
     test_losses = []
     test_accuracies = []
+    # Early stopping parameters
+    delta = config["training"]["delta"]
+    patience = config["training"]["patience"]
+    no_improvement_epochs = 0
+    best_accuracy = 0.0
 
     for epoch in range(num_epochs):
         # Train for one epoch
@@ -107,6 +119,19 @@ def main():
         test_accuracies.append(test_accuracy)
         test_losses.append(test_loss)
         print(f"Epoch : {epoch+1} / {num_epochs} : Test Accuracy : {test_accuracy:.4f}")
+
+        # EArly stopping for convergence
+        if test_accuracy > best_accuracy + delta:
+            best_accuracy = test_accuracy
+            no_improvement_epochs = 0
+        else:
+            no_improvement_epochs += 1
+
+        if no_improvement_epochs >= patience:
+            print(
+                f"Early stopping at epoch {epoch+1} due to no improvement in test accuracy."
+            )
+            break
 
     # Calculate the mean of the train losses and test accuracies over all epochs
     average_train_loss = np.mean(train_losses)
