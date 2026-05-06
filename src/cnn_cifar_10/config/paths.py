@@ -9,9 +9,7 @@ def get_root_dir() -> Path:
         if (parent / "pyproject.toml").exists():  # Check if .toml exists parent dir
             return parent
 
-    raise FileNotFoundError(
-        "Could not find project root: no pyproject.toml found in any parent directory."
-    )
+    raise FileNotFoundError("Could not find project root: no pyproject.toml found in any parent directory.")
 
 
 def get_paths(root_dir: Path) -> dict:
