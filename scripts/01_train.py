@@ -1,3 +1,5 @@
+from time import time
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -75,7 +77,7 @@ def main():
 
     optimizer_name = config["training"]["optimizer"]
     if optimizer_name == "adam":
-        optimizer = torch.optim.Adam(
+        optimizer = optim.Adam(
             model.parameters(), lr=config["training"]["learning_rate"]
         )
     else:
@@ -98,6 +100,9 @@ def main():
     patience = config["training"]["patience"]
     no_improvement_epochs = 0
     best_accuracy = 0.0
+
+    # Time the training process
+    start_time = time()
 
     for epoch in range(num_epochs):
         # Train for one epoch
@@ -133,6 +138,9 @@ def main():
             )
             break
 
+    # End time
+    training_time_seconds = time() - start_time
+
     # Calculate the mean of the train losses and test accuracies over all epochs
     average_train_loss = np.mean(train_losses)
     average_test_accuracies = np.mean(test_accuracies)
@@ -162,9 +170,17 @@ def main():
             "model": config["model"],
         },
         "results": {
-            "average_train_loss": average_train_loss,
-            "average_test_loss": average_test_loss,
-            "average_test_accuracies": average_test_accuracies,
+            "training_time_seconds": round(training_time_seconds, 2),
+            "best_accuracy": best_accuracy,
+            "epoch_runs": len(train_losses),
+            "average_train_loss": float(average_train_loss),
+            "average_test_loss": float(average_test_loss),
+            "average_test_accuracies": float(average_test_accuracies),
+        },
+        "per_epoch": {
+            "train_losses": train_losses,
+            "test_losses": test_losses,
+            "test_accuracies": test_accuracies,
         },
     }
 
