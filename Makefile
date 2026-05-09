@@ -1,4 +1,4 @@
-.PHONY: setup test lint explore train clean help
+.PHONY: setup test lint explore train clean help compare
 
 PYTHON := $(shell command -v python3 2>/dev/null || command -v python 2>/dev/null)
 
@@ -37,9 +37,12 @@ explore:
 train:
 	.venv/bin/python scripts/01_train.py
 
+compare:
+	.venv/bin/python scripts/02_compare_runs.py
+
 clean:
 	@echo "WARNING : This will delete all models, and figures, and all __pycache__ folders. Press Ctrl+C to cancel."
 	@sleep 5 
 	find . -type d -name "__pycache__" -exec rm -rf {} + && \
 	rm -rf .pytest_cache .ruff_cache && \
-	rm -rf outputs/models/* outputs/figures/*
+	rm -rf outputs/models/* outputs/figures/* outputs/reports/*

@@ -17,6 +17,7 @@ def get_paths(root_dir: Path) -> dict:
         "outputs": root_dir / "outputs",
         "figures": root_dir / "outputs" / "figures",
         "models": root_dir / "outputs" / "models",
+        "reports": root_dir / "outputs" / "reports",
         "data_raw": root_dir / "data" / "raw",
         "data_processed": root_dir / "data" / "processed",
     }
