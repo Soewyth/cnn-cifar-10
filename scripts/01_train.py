@@ -37,7 +37,7 @@ def main():
     freeze_backbone = config["model"]["freeze_backbone"]
 
     # Get run ID
-    run_id = get_run_id(tag="run3_finetune_inputsize_224_freezefalse_512features")
+    run_id = get_run_id(tag="run3_finetune_inputsize224_freezebackbone_false_lr0.0001")
 
     # Get same seed
     seed = config["training"]["random_seed"]
@@ -99,7 +99,9 @@ def main():
     delta = config["training"]["delta"]
     patience = config["training"]["patience"]
     no_improvement_epochs = 0
-    best_accuracy = 0.0
+    best_accuracy = 0.0  # To track the best accuracy globally
+    best_accuracy_for_stop = 0.0  # To track the best accuracy for early stopping
+    best_epochs = 0
 
     # Time the training process
     start_time = time()
@@ -125,9 +127,14 @@ def main():
         test_losses.append(test_loss)
         print(f"Epoch : {epoch+1} / {num_epochs} : Test Accuracy : {test_accuracy:.4f}")
 
-        # EArly stopping for convergence
-        if test_accuracy > best_accuracy + delta:
+        # Update best accuracy
+        if test_accuracy > best_accuracy:
             best_accuracy = test_accuracy
+            best_epochs = epoch + 1
+
+        # Early stopping for convergence
+        if test_accuracy > best_accuracy_for_stop + delta:
+            best_accuracy_for_stop = test_accuracy
             no_improvement_epochs = 0
         else:
             no_improvement_epochs += 1
@@ -171,7 +178,8 @@ def main():
         },
         "results": {
             "training_time_seconds": round(training_time_seconds, 2),
-            "best_accuracy": best_accuracy,
+            "best_accuracy": float(best_accuracy),
+            "best_epoch": best_epochs,
             "epoch_runs": len(train_losses),
             "average_train_loss": float(average_train_loss),
             "average_test_loss": float(average_test_loss),
@@ -187,11 +195,12 @@ def main():
     metrics_dest = path_model / f"metrics_{run_id}.json"
     save_metrics(metrics_dict=metrics, save_path=metrics_dest)
 
+    epoch_runs = len(train_losses)
     print(f"\n === Training Values : ===\n")
-    print(f" Average Train Loss over {num_epochs} epochs: {average_train_loss:.4f}\n")
-    print(f" Average Test Loss over {num_epochs} epochs: {average_test_loss:.4f}\n")
+    print(f" Average Train Loss over {epoch_runs} epochs: {average_train_loss:.4f}\n")
+    print(f" Average Test Loss over {epoch_runs} epochs: {average_test_loss:.4f}\n")
     print(
-        f" Average Test Accuracy over {num_epochs} epochs: {average_test_accuracies:.4f}"
+        f" Average Test Accuracy over {epoch_runs} epochs: {average_test_accuracies:.4f}"
     )
     print(f"\n === Metrics and Artifacts Saved : ===\n")
     print(f"\n Models saved at : {model_destination}\n")
