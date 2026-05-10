@@ -2,6 +2,8 @@
 
 This project includes a ResNet18 implementation for image classification on the CIFAR-10 dataset, along with training scripts, evaluation metrics, and a structured project layout. The `REPORT.md` file contains detailed results and analysis of different training runs, while this `README.md` provides an overview of the project structure and quickstart instructions.
 
+This project focuses on the implementation and fine-tuning of a ResNet18 model for the CIFAR-10 dataset and not on model differences.
+
 ## Architecture
 
 - ResNet18 for image classification
