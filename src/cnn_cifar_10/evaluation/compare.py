@@ -65,9 +65,7 @@ def generate_comparison_report(metric_list: list[dict], save_path: Path) -> None
     # Sort rows by best accuracy in descending order (handle None values)
     rows = sorted(
         rows,
-        key=lambda row: (
-            row["best_accuracy"] if row["best_accuracy"] is not None else -1
-        ),
+        key=lambda row: row["best_accuracy"] if row["best_accuracy"] is not None else -1,
         reverse=True,
     )
 
@@ -76,15 +74,12 @@ def generate_comparison_report(metric_list: list[dict], save_path: Path) -> None
     lines = []
     lines.append("# Runs comparison")
     lines.append("")
-    lines.append(
-        "This report compares all training metrics found in `outputs/models/`."
-    )
+    lines.append("This report compares all training metrics found in `outputs/models/`.")
     lines.append("")
     lines.append("## Summary")
     lines.append("")
     lines.append(
-        f"- Best run: `{best_run['run_id']}` with "
-        f"**{best_run['best_accuracy']:.4f}** best accuracy."
+        f"- Best run: `{best_run['run_id']}` with **{best_run['best_accuracy']:.4f}** best accuracy."
         if isinstance(best_run["best_accuracy"], (int, float))
         else f"- Best run: `{best_run['run_id']}`."
     )
@@ -100,11 +95,11 @@ def generate_comparison_report(metric_list: list[dict], save_path: Path) -> None
     lines.append("## Comparison table")
     lines.append("")
     lines.append(
-        "| Rank | Run ID | Architecture | Pretrained | Freeze backbone | Input size | Batch size | LR | Optimizer | Best acc | Avg train loss | Avg test loss | Avg test acc | Time (s) | Epochs |"
+        "| Rank | Run ID | Architecture | Pretrained | Freeze backbone"
+        " | Input size | Batch size | LR | Optimizer | Best acc"
+        " | Avg train loss | Avg test loss | Avg test acc | Time (s) | Epochs |"
     )
-    lines.append(
-        "|---:|---|---|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|"
-    )
+    lines.append("|---:|---|---|---:|---:|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|")
 
     for rank, row in enumerate(rows, start=1):
         lines.append(
@@ -129,12 +124,8 @@ def generate_comparison_report(metric_list: list[dict], save_path: Path) -> None
     lines.append("")
     lines.append("## Notes")
     lines.append("")
-    lines.append(
-        "- `best_accuracy` is the best evaluation accuracy reached during training."
-    )
-    lines.append(
-        "- Average losses and accuracies are computed across the epochs actually run."
-    )
+    lines.append("- `best_accuracy` is the best evaluation accuracy reached during training.")
+    lines.append("- Average losses and accuracies are computed across the epochs actually run.")
     lines.append("- Runs are sorted by descending best accuracy.")
     lines.append("")
 
