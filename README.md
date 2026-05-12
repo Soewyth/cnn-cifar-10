@@ -6,11 +6,13 @@ This project focuses on the implementation and fine-tuning of a ResNet18 model f
 
 ## What this project demonstrates
 
-- Transfer learning and fine-tuning strategy on real-world images (CIFAR-10)
-- 3 comparative runs: wrong input size → frozen backbone → full fine-tuning (41% → 95.5%)
-- Overfitting analysis with early stopping decision
+- Transfer learning and fine-tuning strategy with ResNet18 on real-world images
+- Overfitting detection and early stopping decision
+- GPU/VRAM monitoring across training configurations
 - Reproducible training pipeline with config-driven architecture
 - Structured ML project layout (src/, scripts/, outputs/, Makefile)
+
+> Detailed results and run comparisons based on my personal runs in [REPORT.md](REPORT.md)
 
 ## Architecture
 

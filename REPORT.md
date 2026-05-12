@@ -7,7 +7,7 @@
 | GPU | NVIDIA RTX 3070 Ti |
 | Batch size | 128 |
 | Max epochs | 15 |
-|
+
 
 ---
 
