@@ -4,6 +4,14 @@ This project includes a ResNet18 implementation for image classification on the 
 
 This project focuses on the implementation and fine-tuning of a ResNet18 model for the CIFAR-10 dataset and not on model differences.
 
+## What this project demonstrates
+
+- Transfer learning and fine-tuning strategy on real-world images (CIFAR-10)
+- 3 comparative runs: wrong input size → frozen backbone → full fine-tuning (41% → 95.5%)
+- Overfitting analysis with early stopping decision
+- Reproducible training pipeline with config-driven architecture
+- Structured ML project layout (src/, scripts/, outputs/, Makefile)
+
 ## Architecture
 
 - ResNet18 for image classification
